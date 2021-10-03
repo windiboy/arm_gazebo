@@ -352,7 +352,7 @@
       velocity="100" />
 	<dynamics damping="50" friction="1"/>
   </joint>
-  <link
+  <!-- <link
     name="hand">
     <inertial>
       <origin
@@ -383,159 +383,8 @@
           filename="package://rm_description/meshes/hand.STL" />
       </geometry>
     </collision>
-  </link>
-  <joint
-    name="hand_joint"
-    type="fixed">
-    <origin
-      xyz="0 0 0.1"
-      rpy="-1.7347E-18 2.4378E-13 -7.8121E-13" />
-    <parent
-      link="link6" />
-    <child
-      link="hand" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="link7">
-    <inertial>
-      <origin
-        xyz="1.18772258694833E-09 0 0.013272877911639"
-        rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.01"/>
-    </inertial>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/left_gripper.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="joint7"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="-3.4694E-18 1.7347E-18 5.5511E-17" />
-    <parent
-      link="hand" />
-    <child
-      link="link7" />
-    <axis
-      xyz="0 -1 0" />
-    <limit
-      lower="0"
-      upper="0"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="left_gripper">
-    <inertial>
-      <origin
-        xyz="1.18772258694833E-09 0 0.013272877911639"
-        rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.01"/>
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/left_gripper.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/left_gripper.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="gripper_joint"
-    type="prismatic">
-    <origin
-      xyz="0 0.035 0"
-      rpy="-3.4694E-18 1.7347E-18 5.5511E-17" />
-    <parent
-      link="link7" />
-    <child
-      link="left_gripper" />
-    <axis
-      xyz="0 -1 0" />
-    <limit
-      lower="0"
-      upper="0.035"
-      effort="100"
-      velocity="1" />
-	<dynamics damping="50" friction="1"/>
-  </joint>
-  <link
-    name="right_gripper">
-    <inertial>
-      <origin
-        xyz="7.21624926480757E-10 0 0.0132728826799009"
-        rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.01"/>
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/right_gripper.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/right_gripper.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="right_gripper_joint"
-    type="prismatic">
-    <origin
-      xyz="0 -0.035 0"
-      rpy="-3.4694E-18 1.7347E-18 5.5511E-17" />
-    <parent
-      link="link7" />
-    <child
-      link="right_gripper" />
-    <axis
-      xyz="0 1 0" />
-    <limit
-      lower="-0.035"
-      upper="0"
-      effort="100"
-      velocity="1" />
-    <mimic joint="gripper_joint"/>
-	<dynamics damping="50" friction="1"/>
-  </joint>
+  </link> -->
+
     <!-- Transmissions for ROS Control -->
     <xacro:macro name="transmission_block" params="joint_name">
         <transmission name="tran1">
@@ -556,7 +405,6 @@
     <xacro:transmission_block joint_name="joint4"/>
     <xacro:transmission_block joint_name="joint5"/>
     <xacro:transmission_block joint_name="joint6"/>
-    <xacro:transmission_block joint_name="gripper_joint"/>
 
     <!-- ros_control plugin -->
     <gazebo>

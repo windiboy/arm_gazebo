@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gui" default="True" />
+  
+  <!-- robot -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find innfos_control)/gazebo_control/models/yang.urdf.xacro'" /> 
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="yang_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+	args="-urdf -model yang -param robot_description -x 0 -y 0 -z 0 -R 0 -P 0 -Y 1.57"/> 
+
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find innfos_control)/gazebo_control/rviz/display.rviz  " required="true" />
+</launch>

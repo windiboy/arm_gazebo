@@ -15,7 +15,7 @@ arm:
   gripper_controller:
     type: "position_controllers/JointTrajectoryController"
     joints:
-      - gripper_joint
+      - robotiq_85_left_knuckle_joint
 
 gazebo_ros_control/pid_gains:
   joint1:   {p: 1000, i: 0.01, d: 10.0}
@@ -24,4 +24,4 @@ gazebo_ros_control/pid_gains:
   joint4:   {p: 1000, i: 0.01, d: 10.0}
   joint5:   {p: 1000, i: 0.01, d: 10.0}
   joint6:   {p: 1000, i: 0.01, d: 10.0}
-  gripper_joint:  {p: 1000, i: 0.01, d: 10.0}
+  robotiq_85_left_knuckle_joint:  {p: 1000, i: 0.0, d: 0.0}
