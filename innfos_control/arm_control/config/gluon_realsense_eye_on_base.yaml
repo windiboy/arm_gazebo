@@ -1,0 +1,18 @@
+parameters:
+  eye_on_hand: false
+  freehand_robot_movement: false
+  move_group: manipulator
+  move_group_namespace: /
+  namespace: /gluon_realsense_eye_on_base/
+  robot_base_frame: base_link
+  robot_effector_frame: fake_hand
+  tracking_base_frame: camera_color_optical_frame
+  tracking_marker_frame: camera_marker
+transformation:
+  qw: 0.6636604514721227
+  qx: -0.0423686623685346
+  qy: -0.7450723510848698
+  qz: 0.051253226725579464
+  x: 10.309054747047128
+  y: 0.1005304255686269
+  z: 0.5943412286473363

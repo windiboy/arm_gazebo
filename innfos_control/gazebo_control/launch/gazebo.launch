@@ -1,0 +1,40 @@
+<launch>
+    <arg name="debug" default="false" />
+    <arg name="use_gui" default="false" />
+
+    <!-- Load Param  -->
+    <rosparam command="load" file="$(find innfos_control)/arm_control/config/innfos.yaml" />
+
+    <!-- Launch Gazebo  -->
+    <include file="$(find innfos_control)/gazebo_control/launch/yang_world.launch" />
+
+    <!-- ros_control arm launch file -->
+     <rosparam file="$(find rm_gazebo)/config/arm_gazebo_joint_states.yaml" command="load"/>
+    <node name="joint_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+          output="screen" ns="/arm" args="joint_state_controller" />
+
+    <!-- ros_control trajectory control dof arm launch file -->
+    <include file="$(find rm_gazebo)/launch/arm_trajectory_controller.launch" />
+
+    <!-- We do not have a robot connected, so publish fake joint states -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="use_gui" value="$(arg use_gui)"/>
+      <rosparam param="source_list">[/arm/joint_states]</rosparam>
+    </node>
+
+     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+      <remap from="/joint_states" to="/arm/joint_states" />
+    </node>
+
+    <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
+    <include file="$(find rm_moveit_config)/launch/move_group.launch">
+      <arg name="publish_monitored_planning_scene" value="true" />
+    </include>  
+
+    <!-- Run Rviz and load the default config to see the state of the move_group node -->
+    <!-- <include file="$(find rm_moveit_config)/launch/moveit_rviz.launch">
+      <arg name="config" value="true"/>
+      <arg name="debug" value="$(arg debug)"/>
+    </include> -->
+
+</launch>

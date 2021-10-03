@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.fontSize": 16,
+		"editor.tabSize": 10,
+		"window.zoomLevel": 1,
+		"files.autoSave": "afterDelay",
+		"editor.fontFamily": "\"'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei Mono', WenQuanYi Micro Hei Mono, 'Droid Sans Mono'\""
+	}
+}

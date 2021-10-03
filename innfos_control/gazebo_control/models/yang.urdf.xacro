@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="robot_description" >
+<xacro:include filename="$(find innfos_control)/gazebo_control/models/arm.urdf.xacro" />
+<xacro:arm prefix="arm"/>
+
+<xacro:include filename="$(find innfos_control)/gazebo_control/models/turtle.urdf.xacro" />
+<xacro:turtle prefix="turtle"/>
+
+<joint name="connent_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link="base_link" />
+    <origin xyz="-0.05 0.0 0.2" rpy="0.0 0.0 0" />
+</joint>
+
+</robot>

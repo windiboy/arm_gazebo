@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="move_group_interface" pkg="innfos_control" type="controller" respawn="false" output="screen">
+  </node>
+
+</launch>

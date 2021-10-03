@@ -1,0 +1,33 @@
+<launch>
+    <!-- start the Realsense -->
+    <!-- <param name="child_frame" value="camera_base" /> -->
+    <node name="camera_transform_node" pkg="innfos_control" type="camera_transform.py"/>
+    <!-- 45度时使用 并把child_frame=camera_base -->
+    <!-- <node name="camera_base_transform_node" pkg="innfos_control" type="camera_base_transform.py"/> -->
+    <node pkg="tf" type="static_transform_publisher" name="laser_broadcaster" args="0 0 0 0 0 0 /base_link /laser_link 100" />
+
+
+    <!-- start AprilTag -->
+    <node name="object_detection_node" pkg="openvino" type="safe_node"/>
+
+    <!--publish hand-eye calibration-->
+    <!-- <arg name="eye_on_hand" default="false" />
+    <group ns="gluon_realsense_eye_on_base">
+        <param name="eye_on_hand" value="$(arg eye_on_hand)" />
+        <param unless="$(arg eye_on_hand)" name="robot_base_frame" value="base_link" />
+        <param if="$(arg eye_on_hand)" name="robot_effector_frame" value="fake_hand" />
+        <param name="tracking_base_frame" value="" />
+        <param name="inverse" value="false" />
+        <node name="$(anon handeye_publisher)" pkg="easy_handeye" type="publish.py" output="screen"/>
+    </group> -->
+
+    <!-- start the gripper -->
+
+    <param name="gripper_port" value="/dev/ttyUSB0" />
+    <param name="gripper_baudrate" value="1000000"/>
+    <node name="gripper_control" pkg="innfos_control" type="gripper_control" output="screen"/>
+
+    <!-- start the robot -->
+    <include file="$(find rm_bringup)/launch/rm_robot.launch">
+    </include>
+</launch>

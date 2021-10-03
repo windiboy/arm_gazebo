@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="room">
+  <xacro:include filename="$(find innfos_control)/gazebo_control/models/room.gazebo.xacro"/>
+  <link
+    name="room_link">
+    <inertial>
+      <origin
+        xyz="-1.94822112824507 1.25276651029596 -2.90723055226451"
+        rpy="0 0 0" />
+      <mass
+        value="16168.5958343016" />
+      <inertia
+        ixx="192364.151188655"
+        ixy="-86.9106786109994"
+        ixz="-65926.2854752906"
+        iyy="374286.87183972"
+        iyz="4.13676432645725"
+        izz="198812.779610138" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/room_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/room_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="door_link">
+    <inertial>
+      <origin
+        xyz="-0.42652009925419 0.0173510276999185 -0.00416820084636216"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/door_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/door_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="door_joint"
+    type="revolute">
+    <origin
+      xyz="0.427 1.0825 -2.9185"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="room_link" />
+    <child
+      link="door_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="hand_link">
+    <inertial>
+      <origin
+        xyz="-0.0371421570958161 0.00469105182371954 -6.3504757008559E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.18156036538561" />
+      <inertia
+        ixx="0.000416731657366205"
+        ixy="3.9668813712661E-05"
+        ixz="1.94744644096067E-12"
+        iyy="0.000822697682888218"
+        iyz="-4.12520851710876E-12"
+        izz="0.000445503015103821" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/hand_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/hand_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hand_joint"
+    type="revolute">
+    <origin
+      xyz="-0.782 0.0175 -0.0425"
+      rpy="1.5708 0 -3.1416" />
+    <parent
+      link="door_link" />
+    <child
+      link="hand_link" />
+    <axis
+      xyz="0 0 -1" />
+    <dynamics
+      friction = "1.0"
+      damping="0.7" />
+    <limit
+      lower="-3.14"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+<xacro:room_gazebo />
+</robot>

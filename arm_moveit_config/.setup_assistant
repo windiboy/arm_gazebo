@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: innfos_control
+    relative_path: gazebo_control/models/yang.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/robot_description.srdf
+  CONFIG:
+    author_name: yang
+    author_email: yang@qq.com
+    generated_timestamp: 1633179395
