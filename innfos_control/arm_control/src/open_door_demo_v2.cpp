@@ -75,13 +75,12 @@ int main(int argc, char **argv)
     target_pose.position.y = target_pose_params[i]["pos_y"];
     target_pose.position.z = target_pose_params[i]["pos_z"];
   }
-  std::cout << "[open_door]" << target_pose << std::endl;
 
   // work flow
   while (ros::ok())
   {
     //round1
-    std::vector<double> joint_home_positions(6, 1.0);
+    std::vector<double> joint_home_positions(6, 0.0);
     move_group.setJointValueTarget(joint_home_positions);
     move_group.setMaxVelocityScalingFactor(1);
     ROS_INFO("Go to home");
@@ -93,7 +92,7 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Pose> waypoints;
     geometry_msgs::Pose sub_pose;
     sub_pose = target_pose;
-    sub_pose.position.x -= 0.1;
+    sub_pose.position.y -= 0.05;
     waypoints.push_back(sub_pose);
     waypoints.push_back(target_pose);
     move_group.setMaxVelocityScalingFactor(0.02);
@@ -115,8 +114,8 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Pose> waypoints_3;
     geometry_msgs::Pose second_pose;
     second_pose = target_pose;
-    orientation.setRPY(M_PI * 3 / 4, 0, 0);
-    second_pose.orientation = tf2::toMsg(orientation);
+    // orientation.setRPY(M_PI * 3 / 4, 0, 0);
+    // second_pose.orientation = tf2::toMsg(orientation);
     second_pose.position.z -= 0.05;
     waypoints_3.push_back(second_pose);
     move_group.setMaxVelocityScalingFactor(0.2);
@@ -132,9 +131,9 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Pose> place_waypoints;
     geometry_msgs::Pose place_pose;
     place_pose = second_pose;
-    place_pose.position.x += 0.04;
+    place_pose.position.y -= 0.04;
     place_waypoints.push_back(place_pose);
-    place_pose.position.x += 0.04;
+    place_pose.position.y -= 0.04;
     place_waypoints.push_back(place_pose);
     move_group.setMaxVelocityScalingFactor(0.2);
     moveit_msgs::RobotTrajectory place_trajectory;

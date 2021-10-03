@@ -6,7 +6,7 @@
 
   <!--The visualization component of MoveIt!-->
   <include file="$(find arm_moveit_config)/launch/moveit_rviz.launch"/>
-    <arg name="config" value="true"/>
+    <arg name="rviz_config" value="true"/>
     <arg name="debug" value="false"/>
 
     <!-- We do not have a robot connected, so publish fake joint states -->

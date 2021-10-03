@@ -30,6 +30,6 @@
   <node name="yang_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
 	args="-urdf -model yang -param robot_description -x 0 -y 0 -z 0 -R 0 -P 0 -Y 1.57"/> 
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find innfos_control)/gazebo_control/rviz/yang.rviz"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find innfos_control)/gazebo_control/rviz/yang.rviz"/> -->
 
 </launch>
