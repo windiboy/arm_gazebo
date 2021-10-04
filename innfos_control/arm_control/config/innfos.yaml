@@ -1,7 +1,7 @@
 target_pose:
-   - pos_x: 0.0
-     pos_y: 0.3
-     pos_z: 0.8
+   - pos_x: -0.34
+     pos_y: 2.93
+     pos_z: 1.04
      orientation_r: -1.57
      orientation_p: 0.0
      orientation_y: 0.0

@@ -78,21 +78,25 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Pose> waypoints;
     geometry_msgs::Pose sub_pose;
     sub_pose = target_pose;
-    sub_pose.position.x = 0.0;
-    sub_pose.position.y = 0.0;
-    sub_pose.position.z = 0.7;
-    // sub_pose.position.y -= 0.05;
+    // sub_pose.position.x = 0.0;
+    // sub_pose.position.y = 0.0;
+    // sub_pose.position.z = 0.7;
+    sub_pose.position.y -= 0.1;
     waypoints.push_back(sub_pose);
-    // waypoints.push_back(target_pose);
+    waypoints.push_back(target_pose);
     moveit_msgs::RobotTrajectory trajectory;
     const double jump_threshold = 0.0;
     const double eef_step = 0.02;
-    double fraction = move_group.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-    ROS_INFO_NAMED("tutorial", "Visualizing (Cartesian path) (%.2f%% acheived)", fraction * 100.0);
+    double fraction = 0.0;
+    while (fraction < 0.5)
+    {
+      fraction = move_group.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+      ROS_INFO_NAMED("tutorial", "Visualizing (Cartesian path) (%.2f%% acheived)", fraction * 100.0);
+    }
     if (fraction > 0.5)
     {
       move_group.execute(trajectory);
-      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.8);
+      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.4);
       gripper_group.move();
     }
     else

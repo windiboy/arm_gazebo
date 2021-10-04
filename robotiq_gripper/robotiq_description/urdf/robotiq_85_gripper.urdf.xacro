@@ -24,7 +24,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.636951" />
+        <mass value="0.0636951" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000380" ixy = "0.000000" ixz = "0.000000"
              iyx = "0.000000" iyy = "0.001110" iyz = "0.000000"
@@ -61,7 +61,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.018491" />
+        <mass value="0.0018491" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000009" ixy = "-0.000001" ixz = "0.000000"
              iyx = "-0.000001" iyy = "0.000001" iyz = "0.000000"
@@ -81,7 +81,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.018491" />
+        <mass value="0.0018491" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000009" ixy = "-0.000001" ixz = "0.000000"
              iyx = "-0.000001" iyy = "0.000001" iyz = "0.000000"
@@ -113,7 +113,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.027309" />
+        <mass value="0.0027309" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000003" ixy = "-0.000002" ixz = "0.000000"
              iyx = "-0.000002" iyy = "0.000021" iyz = "0.000000"
@@ -133,7 +133,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.027309" />
+        <mass value="0.0027309" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000003" ixy = "-0.000002" ixz = "0.000000"
              iyx = "-0.000002" iyy = "0.000021" iyz = "0.000000"
@@ -171,7 +171,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.029951" />
+        <mass value="0.0029951" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000039" ixy = "0.000000" ixz = "0.000000"
              iyx = "0.000000" iyy = "0.000005" iyz = "0.000000"
@@ -190,7 +190,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.029951" />
+        <mass value="0.0029951" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000039" ixy = "0.000000" ixz = "0.000000"
              iyx = "0.000000" iyy = "0.000005" iyz = "0.000000"
@@ -229,7 +229,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.019555" />
+        <mass value="0.0019555" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000002" ixy = "0.000000" ixz = "0.000000"
              iyx = "0.000000" iyy = "0.000005" iyz = "0.000000"
@@ -249,7 +249,7 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="0.019555" />
+        <mass value="0.0019555" />
         <origin xyz="0.0 0.0 0.0" />
         <inertia ixx = "0.000002" ixy = "0.000000" ixz = "0.000000"
              iyx = "0.000000" iyy = "0.000005" iyz = "0.000000"

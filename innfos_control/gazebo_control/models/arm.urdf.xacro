@@ -20,7 +20,7 @@
       <origin
         xyz="-0.000109373565465087 -0.000540506855878586 0.0596939182288847"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="1.0"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -52,7 +52,7 @@
       <origin
         xyz="1.03803520729029E-06 -0.0103990426169562 0.0743349525008567"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="1.0"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -103,7 +103,7 @@
       <origin
         xyz="0.125617616072843 0.00357568268785996 0.0132826613843138"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="1.0"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -154,7 +154,7 @@
       <origin
         xyz="-2.62322173649743E-07 -0.0531866163941078 0.00185294381389689"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="1.0"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -205,7 +205,7 @@
       <origin
         xyz="-1.89389405602647E-07 0.0125575326860273 0.0583180851477226"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.1"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -256,7 +256,7 @@
       <origin
         xyz="-2.3157236272997E-07 -0.0507443613513162 0.00177089430075761"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.1"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -307,7 +307,7 @@
       <origin
         xyz="-0.000457792901041587 8.72837963215023E-05 -0.012860781989493"
         rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.1"/>
+      <xacro:inertial_matrix mass="0.01"/>
     </inertial>
     <visual>
       <origin
@@ -352,38 +352,19 @@
       velocity="100" />
 	<dynamics damping="50" friction="1"/>
   </joint>
-  <!-- <link
-    name="hand">
-    <inertial>
-      <origin
-        xyz="3.68536599532066E-06 1.38476910288565E-05 -0.0635543718731382"
-        rpy="0 0 0" />
-      <xacro:inertial_matrix mass="0.05"/>
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+ <link name="ee_link">
+    <!-- <visual>
+      <origin xyz="0 0.001 0" rpy="0 0 0"/>
       <geometry>
-        <mesh
-          filename="package://rm_description/meshes/hand.STL" />
+        <box size="0.030 0.03 0.03"/>
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://rm_description/meshes/hand.STL" />
-      </geometry>
-    </collision>
-  </link> -->
+    </visual> -->
+  </link>
+  <joint name="ee_joint" type="fixed">
+    <parent link="link6"/>
+    <child link="ee_link"/>
+    <origin xyz="0.0 0.0 0.13" rpy="0.0 0 0"/>
+  </joint>
 
     <!-- Transmissions for ROS Control -->
     <xacro:macro name="transmission_block" params="joint_name">

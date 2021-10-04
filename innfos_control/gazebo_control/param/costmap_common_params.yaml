@@ -1,0 +1,14 @@
+obstacle_range: 3.0
+raytrace_range: 3.5
+
+footprint: [[-0.205, -0.155], [-0.205, 0.155], [0.077, 0.155], [0.077, -0.155]]
+#robot_radius: 0.17
+
+# 膨胀半径，膨胀层会把障碍物代价膨胀直到该半径为止
+inflation_radius: 0.5
+# 膨胀过程中应用到代价值的比例因子 增大比例因子反而会降低代价
+cost_scaling_factor: 3.0
+
+map_type: costmap
+observation_sources: scan
+scan: {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true}

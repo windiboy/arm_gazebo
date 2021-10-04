@@ -29,4 +29,6 @@
       <remap from="/joint_states" to="/arm/joint_states" />
     </node>
 
+      <!--The visualization component of MoveIt!-->
+  <!-- <include file="$(find arm_moveit_config)/launch/moveit_rviz.launch"/> -->
 </launch>
