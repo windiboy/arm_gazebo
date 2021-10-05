@@ -1,0 +1,5 @@
+<launch>
+          <node pkg="rosbag" type="record" name="bag_record" 
+          args="-O /home/yang/bagfile/laser_record.bag -a -x '(.*)/compressed(.*)'" 
+          output="screen"/> 
+</launch>

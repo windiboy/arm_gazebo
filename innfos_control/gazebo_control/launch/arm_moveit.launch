@@ -33,4 +33,6 @@
   <!-- <include file="$(find arm_moveit_config)/launch/moveit_rviz.launch"/> -->
     <include file="$(find innfos_control)/gazebo_control/launch/navigation.launch">
     </include>
+    <include file="$(find laser_line_extraction)/launch/line_extraction.launch">
+    </include>
 </launch>
