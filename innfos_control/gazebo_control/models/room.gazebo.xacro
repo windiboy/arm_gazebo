@@ -5,10 +5,14 @@
 
   <gazebo reference="door_link">
     <material>Gazebo/Orange</material>
+    <minDepth>0.001</minDepth>
   </gazebo>
 
   <gazebo reference="hand_link">
     <material>Gazebo/Blue</material>
+      <mu1>1000</mu1>
+      <mu2>1000</mu2>
+      <minDepth>0.001</minDepth>
   </gazebo>
 
   </xacro:macro>

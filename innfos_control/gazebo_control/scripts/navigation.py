@@ -65,7 +65,7 @@ if __name__ == "__main__":
     r = rospy.Rate(1)
     plists = []
     plists.append([0.0, 0.0, 0.0, 1.57])
-    plists.append([-0.34, 2.63, 0.0, 1.57])
+    plists.append([-0.32, 2.61, 0.0, 1.57])
 
     while not rospy.is_shutdown():
           for p in plists:

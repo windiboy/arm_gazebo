@@ -68,7 +68,8 @@ int main(int argc, char **argv)
     //round1
     std::vector<double> joint_home_positions(6, 0.0);
     move_group.setJointValueTarget(joint_home_positions);
-    // move_group.setMaxVelocityScalingFactor(5);
+    move_group.setMaxVelocityScalingFactor(1);
+    gripper_group.setMaxVelocityScalingFactor(1);
     ROS_INFO("Go to home");
     gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.0);
     gripper_group.move();
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
     if (fraction > 0.5)
     {
       move_group.execute(trajectory);
-      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.4);
+      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.8);
       gripper_group.move();
     }
     else

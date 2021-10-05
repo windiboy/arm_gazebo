@@ -31,4 +31,6 @@
 
       <!--The visualization component of MoveIt!-->
   <!-- <include file="$(find arm_moveit_config)/launch/moveit_rviz.launch"/> -->
+    <include file="$(find innfos_control)/gazebo_control/launch/navigation.launch">
+    </include>
 </launch>
