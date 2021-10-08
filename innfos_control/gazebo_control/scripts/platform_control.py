@@ -9,7 +9,7 @@ from math import pi
 from std_msgs.msg import String
 
 
-class navigation_demo:
+class PlatformControl:
     def __init__(self):
         self.move_base = actionlib.SimpleActionClient(
             "move_base", MoveBaseAction)
@@ -47,12 +47,13 @@ class navigation_demo:
         if not result:
             self.move_base.cancel_goal()
             rospy.loginfo("Timed out achieving goal")
+            return False
         else:
             state = self.move_base.get_state()
             if state == GoalStatus.SUCCEEDED:
                 rospy.loginfo("reach goal %s succeeded!" % p)
-
-        return True
+                return True
+        return False
 
     def cancel(self):
         self.move_base.cancel_all_goals()
@@ -60,8 +61,8 @@ class navigation_demo:
 
 
 if __name__ == "__main__":
-    rospy.init_node('navigation_demo', anonymous=True)
-    navi = navigation_demo()
+    rospy.init_node('PlatformControl', anonymous=True)
+    navi = PlatformControl()
     r = rospy.Rate(1)
     plists = []
     plists.append([0.0, 0.0, 0.0, 1.57])

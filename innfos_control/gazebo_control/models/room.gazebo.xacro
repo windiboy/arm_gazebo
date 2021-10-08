@@ -10,9 +10,22 @@
 
   <gazebo reference="hand_link">
     <material>Gazebo/Blue</material>
-      <mu1>1000</mu1>
-      <mu2>1000</mu2>
-      <minDepth>0.001</minDepth>
+    <mu1>1000</mu1>
+    <mu2>1000</mu2>
+    <minDepth>0.001</minDepth>
+    <sensor type="contact" name="bumper">
+        <always_on>true</always_on>
+        <update_rate>50.0</update_rate>
+        <visualize>true</visualize>
+        <contact>
+            <collision>hand_link_collision</collision>
+        </contact>
+        <plugin name="gazebo_ros_bumper_controller" filename="libgazebo_ros_bumper.so">
+            <updateRate>50</updateRate>
+            <bumperTopicName>bumper</bumperTopicName>
+            <frameName>base_footprint</frameName>
+        </plugin>
+    </sensor>
   </gazebo>
 
   </xacro:macro>

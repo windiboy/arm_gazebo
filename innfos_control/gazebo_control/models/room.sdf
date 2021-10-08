@@ -1,0 +1,139 @@
+<sdf version='1.6'>
+  <model name='room'>
+    <link name='room_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-1.94822 1.25277 -2.90723 0 -0 0</pose>
+        <mass>10000</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.5</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='room_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/room_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='room_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/room_link.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name='door_link'>
+      <pose frame=''>0.427 1.0825 -2.9185 -1.5708 0 0</pose>
+      <inertial>
+        <pose frame=''>-0.42652 0.017351 -0.004168 0 -0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.5</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='door_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/door_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='door_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/door_link.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='door_joint' type='revolute'>
+      <child>door_link</child>
+      <parent>room_link</parent>
+      <axis>
+        <xyz>0 -1 4e-06</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>3.14</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='hand_link'>
+      <pose frame=''>-0.355 1.04 -2.936 -3.14159 7e-06 -3.14159</pose>
+      <inertial>
+        <pose frame=''>-0.037142 0.004691 -0 0 -0 0</pose>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>1</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.5</iyy>
+          <iyz>0</iyz>
+          <izz>1</izz>
+        </inertia>
+      </inertial>
+      <collision name='hand_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/hand_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='hand_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://innfos_control/gazebo_control/meshes/hand_link.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='hand_joint' type='revolute'>
+      <child>hand_link</child>
+      <parent>door_link</parent>
+      <axis>
+        <xyz>-7e-06 7e-06 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>1</upper>
+          <effort>300</effort>
+          <velocity>10</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+  </model>
+</sdf>

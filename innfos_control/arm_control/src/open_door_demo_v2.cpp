@@ -97,12 +97,12 @@ int main(int argc, char **argv)
     if (fraction > 0.5)
     {
       move_group.execute(trajectory);
-      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.8);
+      gripper_group.setJointValueTarget("robotiq_85_left_knuckle_joint", 0.5);
       gripper_group.move();
     }
     else
       break;
-
+    return 0;
     //round3
     std::vector<geometry_msgs::Pose> waypoints_3;
     geometry_msgs::Pose second_pose;
