@@ -9,7 +9,10 @@
 		"editor.tabSize": 10,
 		"window.zoomLevel": 1,
 		"files.autoSave": "afterDelay",
-		"editor.fontFamily": "\"'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei Mono', WenQuanYi Micro Hei Mono, 'Droid Sans Mono'\"",
+		"editor.fontFamily":"'Fira Code'",
+		// "editor.fontFamily": "\"'WenQuanYi Micro Hei', 'WenQuanYi Micro Hei Mono', WenQuanYi Micro Hei Mono, 'Droid Sans Mono'\"",
+		"editor.fontLigatures":true,
+		"editor.fontWeight": "400",
 		"files.associations": {
 			"bitset": "cpp",
 			"array": "cpp",

@@ -1,12 +1,16 @@
 #!/usr/bin/env python2
+import math
 import rospy
-
+import tf
 import actionlib
+import time
 from actionlib_msgs.msg import *
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from geometry_msgs.msg import Twist
 from tf_conversions import transformations
-from math import pi
+from math import pi, sin
 from std_msgs.msg import String
+from setting import DOOR_JOINT_POSE
 
 
 class PlatformControl:
@@ -14,6 +18,8 @@ class PlatformControl:
         self.move_base = actionlib.SimpleActionClient(
             "move_base", MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(60))
+        self.tf_sub = tf.TransformListener()
+        self.cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
     def _done_cb(self, status, result):
         rospy.loginfo("navigation done! status:%d result:%s" %
@@ -24,6 +30,35 @@ class PlatformControl:
 
     def _feedback_cb(self, feedback):
         rospy.loginfo("[Navi] navigation feedback\r\n%s" % feedback)
+
+    def pull_door_circle(self):
+        try:
+            (trans, rot) = self.tf_sub.lookupTransform(
+                "/odom", "/base_footprint", rospy.Time(0))
+            x = trans[0]-DOOR_JOINT_POSE[0]
+            y = trans[1]-DOOR_JOINT_POSE[1]
+            radius = math.sqrt(x*x + y*y)
+            angle = math.atan(y/x)
+            while angle < math.pi/2:
+                angle += 0.01
+                radius *= 0.9
+                goal = [-radius * math.cos(angle)+DOOR_JOINT_POSE[0],
+                        -radius * math.sin(angle)+DOOR_JOINT_POSE[1], 0.0, angle+math.pi/2]
+                rospy.loginfo("[Navi] pull_door_circle goto:{}".format(goal))
+                self.goto(goal)
+        except Exception as e:
+            rospy.logerr("[Navi] pull_door_circle err {}".format(e))
+
+    def pull_door_circle_v2(self):
+        vel = Twist()
+        vel.linear.x = -0.05
+        vel.angular.z = 0.2
+        self.cmd_pub.publish(vel)
+        time.sleep(10)
+        vel.linear.x = 0.0
+        vel.angular.z = 0.0
+        self.cmd_pub.publish(vel)
+        return True
 
     def goto(self, p):
         rospy.loginfo("[Navi] goto %s" % p)
@@ -63,13 +98,8 @@ class PlatformControl:
 if __name__ == "__main__":
     rospy.init_node('PlatformControl', anonymous=True)
     navi = PlatformControl()
-    r = rospy.Rate(1)
-    plists = []
-    plists.append([0.0, 0.0, 0.0, 1.57])
-    plists.append([-0.32, 2.61, 0.0, 1.57])
+    r = rospy.Rate(10)
 
     while not rospy.is_shutdown():
-          for p in plists:
-                    navi.goto(p)
-          break
-#         r.sleep()
+        navi.pull_door_circle_v2()
+        r.sleep()

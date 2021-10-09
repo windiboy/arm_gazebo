@@ -152,7 +152,7 @@
       friction = "1.0"
       damping="0.7" />
     <limit
-      lower="-3.14"
+      lower="-1"
       upper="0"
       effort="0"
       velocity="0" />
