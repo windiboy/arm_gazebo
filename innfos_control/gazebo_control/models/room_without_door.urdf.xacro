@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="room">
+  <link
+    name="room_link">
+    <inertial>
+      <origin
+        xyz="-1.94822112824507 1.25276651029596 -2.90723055226451"
+        rpy="0 0 0" />
+      <mass
+        value="16168.5958343016" />
+      <inertia
+        ixx="192364.151188655"
+        ixy="-86.9106786109994"
+        ixz="-65926.2854752906"
+        iyy="374286.87183972"
+        iyz="4.13676432645725"
+        izz="198812.779610138" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/room_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://innfos_control/gazebo_control/meshes/room_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

@@ -4,13 +4,14 @@ import rospy
 import tf
 import actionlib
 import time
+import threading
 from actionlib_msgs.msg import *
+from gazebo_msgs.msg import ContactsState
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import Twist
 from tf_conversions import transformations
 from math import pi, sin
 from std_msgs.msg import String
-from setting import DOOR_JOINT_POSE
 
 
 class PlatformControl:
@@ -19,7 +20,12 @@ class PlatformControl:
             "move_base", MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(60))
         self.tf_sub = tf.TransformListener()
+        self.tf_sub.waitForTransform("/odom", "/base_footprint", rospy.Time(), rospy.Duration(4.0))
         self.cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self.contact_sub = rospy.Subscriber(
+            "/bumper", ContactsState, self.pointCallback)
+        self.catched = True
+        self.start_time_cycle = rospy.Time.now()
 
     def _done_cb(self, status, result):
         rospy.loginfo("navigation done! status:%d result:%s" %
@@ -29,32 +35,31 @@ class PlatformControl:
         rospy.loginfo("[Navi] navigation has be actived")
 
     def _feedback_cb(self, feedback):
-        rospy.loginfo("[Navi] navigation feedback\r\n%s" % feedback)
+        pass
+        # rospy.loginfo("[Navi] navigation feedback\r\n%s" % feedback)
+    
+    def pointCallback(self, data):
+        if len(data.states) == 0:
+            self.catched = False
 
-    def pull_door_circle(self):
-        try:
-            (trans, rot) = self.tf_sub.lookupTransform(
-                "/odom", "/base_footprint", rospy.Time(0))
-            x = trans[0]-DOOR_JOINT_POSE[0]
-            y = trans[1]-DOOR_JOINT_POSE[1]
-            radius = math.sqrt(x*x + y*y)
-            angle = math.atan(y/x)
-            while angle < math.pi/2:
-                angle += 0.01
-                radius *= 0.9
-                goal = [-radius * math.cos(angle)+DOOR_JOINT_POSE[0],
-                        -radius * math.sin(angle)+DOOR_JOINT_POSE[1], 0.0, angle+math.pi/2]
-                rospy.loginfo("[Navi] pull_door_circle goto:{}".format(goal))
-                self.goto(goal)
-        except Exception as e:
-            rospy.logerr("[Navi] pull_door_circle err {}".format(e))
+    def move_back(self, delay=5.0):
+        vel = Twist()
+        vel.linear.x = -0.2
+        self.cmd_pub.publish(vel)
+        time.sleep(delay)
+        vel.linear.x = 0.0
+        self.cmd_pub.publish(vel)
+        return True
 
     def pull_door_circle_v2(self):
         vel = Twist()
-        vel.linear.x = -0.05
-        vel.angular.z = 0.2
-        self.cmd_pub.publish(vel)
-        time.sleep(10)
+        used_time = rospy.Time.now()-self.start_time_cycle
+        while self.catched and (used_time < rospy.Duration(30)):
+            used_time = rospy.Time.now()-self.start_time_cycle
+            rospy.loginfo("[pull_door_circle_v2] used_time {}, max time {}".format(used_time,rospy.Duration(30)))
+            vel.linear.x = -0.05
+            vel.angular.z = 0.01
+            self.cmd_pub.publish(vel)
         vel.linear.x = 0.0
         vel.angular.z = 0.0
         self.cmd_pub.publish(vel)
@@ -93,6 +98,16 @@ class PlatformControl:
     def cancel(self):
         self.move_base.cancel_all_goals()
         return True
+
+
+class NavThread (threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.nav = PlatformControl()
+
+    def run(self):
+        self.nav.pull_door_circle_v2()
+        rospy.loginfo("[NavThread] exit")
 
 
 if __name__ == "__main__":

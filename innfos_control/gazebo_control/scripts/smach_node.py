@@ -25,7 +25,13 @@ class Smach_Node():
             smach.StateMachine.add('NAVIGATE_CIRCLE', smach_states.NAVIGATE_CIRCLE(),
                                    transitions={'succeeded': 'GRIPPER_OPEN', 'failed': 'failed'})
             smach.StateMachine.add('GRIPPER_OPEN', smach_states.GRIPPER_OPEN(),
-                                   transitions={'succeeded': 'succeeded'})
+                                   transitions={'succeeded': 'PREPARE_FOR_NEXT'})
+            smach.StateMachine.add('PREPARE_FOR_NEXT', smach_states.PREPARE_FOR_NEXT(),
+                                   transitions={'succeeded': 'NAVIGATE_TO_DOOR', 'failed': 'failed'})
+            smach.StateMachine.add('NAVIGATE_TO_DOOR', smach_states.NAVIGATE_TO_DOOR(),
+                                   transitions={'succeeded': 'NAVIGATE_TO_OTHERROOM', 'failed': 'failed'})
+            smach.StateMachine.add('NAVIGATE_TO_OTHERROOM', smach_states.NAVIGATE_TO_OTHERROOM(),
+                                   transitions={'succeeded': 'succeeded', 'failed': 'failed'})
 
         # Create and start the introspection server
         sis = smach_ros.IntrospectionServer(
