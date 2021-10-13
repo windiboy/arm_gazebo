@@ -13,13 +13,13 @@
   </joint>
 
   <link name="turtle_base_link">
-    <visual>
+    <!-- <visual>
       <origin xyz="-0.064 0 0.0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://turtlebot3_description/meshes/bases/waffle_pi_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="light_black"/>
-    </visual>
+    </visual> -->
 
     <collision>
       <origin xyz="-0.064 0 0.047" rpy="0 0 0"/>

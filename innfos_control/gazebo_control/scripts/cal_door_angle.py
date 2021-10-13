@@ -5,6 +5,8 @@ from rospy.rostime import Time
 import utils
 import tf
 import geometry_msgs.msg
+from std_msgs.msg import Float32
+from sensor_msgs.msg import LaserScan
 from matplotlib import pyplot as plt
 from laser_line_extraction.msg import LineSegmentList
 
@@ -13,6 +15,10 @@ class CalDoorAngle:
     def __init__(self):
         self.point_sub = rospy.Subscriber(
             "/line_segments", LineSegmentList, self.pointCallback, queue_size=1)
+        self.scan_sub = rospy.Subscriber(
+            "/scan", LaserScan, self.scanCallback, queue_size=10)
+        self.scan_pub = rospy.Publisher("/scan_v2",LaserScan,queue_size=10)
+        self.angle_pub = rospy.Publisher("/door_angle",Float32,queue_size=10)
         self.tf_sub = tf.TransformListener()
         self.angle_min = 3
 
@@ -24,6 +30,12 @@ class CalDoorAngle:
         laser_point.point.y = y
         laser_point.point.z = 0
         return self.tf_sub.transformPoint("/odom", laser_point)
+
+    def scanCallback(self, data):
+        data.angle_min = math.pi*270/180
+        data.ranges = data.ranges[270:]
+        data.intensities = data.intensities[270:]
+        self.scan_pub.publish(data)
 
     def pointCallback(self, data):
         line_list = []
@@ -43,6 +55,8 @@ class CalDoorAngle:
                     res.append(angle)
                 j = j+1
             i = i+1
+        if len(res)==1:
+            self.angle_pub.publish(res[0])
         print(res)
 
 

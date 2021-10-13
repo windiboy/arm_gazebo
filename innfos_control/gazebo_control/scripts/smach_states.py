@@ -3,9 +3,10 @@ import math
 import threading
 import time
 import rospy
+from rospy.client import set_param
 import smach
 import copy
-import geometry_msgs.msg
+import std_msgs.msg
 from gazebo_msgs.msg import ContactsState
 from tf_conversions import transformations
 from platform_control import PlatformControl, NavThread
@@ -23,9 +24,38 @@ class NAVIGATE_TO_OUTLET(smach.State):
         self.name = "NAVIGATE_TO_OUTLET"
         self.nav = PlatformControl()
         self.arm = ArmControl()
+        self.nav_goal = [0.0, 2.0, 0.0, math.pi/2]
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state {}'.format(self.name))
+        rospy.loginfo('Naviting to {}'.format(self.nav_goal))
+
+        jobs = []
+        jobs.append(threading.Thread(
+            target=self.nav.goto, kwargs={"p": self.nav_goal}))
+        jobs.append(threading.Thread(target=self.arm.move_group.go,
+                    args=([0.0, -0.52, 1.06, 0.0, 1, 1.51],)))
+        for j in jobs:
+            j.start()
+        for j in jobs:
+            j.join()
+        smach_count = rospy.get_param("smach_count")
+        smach_count += 1
+        rospy.set_param("smach_count", smach_count)
+        return 'succeeded'
+
+
+class NAVIGATE_TO_FETCH(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['succeeded', 'failed', 'aborted'])
+        self.name = "NAVIGATE_TO_FETCH"
+        self.nav = PlatformControl()
+        self.arm = ArmControl()
         self.nav_goal = [HAND_POSE[0]+0.2, HAND_POSE[1]-0.3, 0.0, math.pi*2/3]
 
     def execute(self, userdata):
+        if rospy.get_param("smach_count") > 3:
+            return 'aborted'
         rospy.loginfo('Executing state {}'.format(self.name))
         rospy.loginfo('Naviting to {}'.format(self.nav_goal))
         if self.nav.goto(self.nav_goal):
@@ -70,16 +100,56 @@ class NAVIGATE_TO_OTHERROOM(smach.State):
             return 'failed'
 
 
-class FETCH_DOOR_HAND(smach.State):
+class NAVIGATE_CIRCLE(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['succeeded', 'failed'])
-        self.counter = 0
-        self.name = "FETCH_DOOR_HAND"
+        self.name = "NAVIGATE_CIRCLE"
+        self.nav = PlatformControl()
         self.arm = ArmControl()
 
     def execute(self, userdata):
         rospy.loginfo('Executing state {}'.format(self.name))
 
+        try:
+            (trans, rot) = self.nav.tf_sub.lookupTransform(
+                "/base_link", "/ee_link", rospy.Time(0))
+        except Exception as e:
+            rospy.logerr("[{}] tf err: {}".format(self.name, e))
+            return False
+        trans[0] += 0.05
+        trans[1] -= 0.05
+        point_2 = ListToPose(trans+HAND_POSE[3:])
+        rospy.loginfo("[{}] goal: {}".format(self.name, point_2))
+        self.arm.move_group.set_pose_target(point_2)
+        if True:
+            threads = []
+
+            thread1 = ArmThread(self.arm.move_group)
+            thread2 = NavThread()
+
+            # thread1.start()
+            thread2.start()
+
+            # threads.append(thread1)
+            threads.append(thread2)
+
+            for t in threads:
+                t.join()
+            return 'succeeded'
+        else:
+            return 'failed'
+
+
+class FETCH_DOOR_HAND(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['succeeded', 'failed', 'aborted'])
+        self.name = "FETCH_DOOR_HAND"
+        self.arm = ArmControl()
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state {}'.format(self.name))
+        if rospy.get_param("smach_count") > 3:
+            return 'aborted'
         pose_goal = ListToPose(HAND_POSE)
 
         waypoints = []
@@ -99,6 +169,7 @@ class FETCH_DOOR_HAND(smach.State):
             self.arm.move_group.execute(plan, wait=True)
             return 'succeeded'
         else:
+            rospy.set_param("smach_count", rospy.get_param("smach_count")+1)
             return 'failed'
 
 
@@ -146,46 +217,6 @@ class GRIPPER_OPEN(smach.State):
         return 'succeeded'
 
 
-class NAVIGATE_CIRCLE(smach.State):
-    def __init__(self):
-        smach.State.__init__(self, outcomes=['succeeded', 'failed'])
-        self.name = "NAVIGATE_CIRCLE"
-        self.nav = PlatformControl()
-        self.arm = ArmControl()
-
-    def execute(self, userdata):
-        rospy.loginfo('Executing state {}'.format(self.name))
-
-        try:
-            (trans, rot) = self.nav.tf_sub.lookupTransform(
-                "/base_link", "/ee_link", rospy.Time(0))
-        except Exception as e:
-            rospy.logerr("[{}] tf err: {}".format(self.name, e))
-            return False
-        trans[0] += 0.05
-        trans[1] -= 0.05
-        point_2 = ListToPose(trans+HAND_POSE[3:])
-        rospy.loginfo("[{}] goal: {}".format(self.name, point_2))
-        self.arm.move_group.set_pose_target(point_2)
-        if True:
-            threads = []
-
-            thread1 = ArmThread(self.arm.move_group)
-            thread2 = NavThread()
-
-            # thread1.start()
-            thread2.start()
-
-            # threads.append(thread1)
-            threads.append(thread2)
-
-            for t in threads:
-                t.join()
-            return 'succeeded'
-        else:
-            return 'failed'
-
-
 class PREPARE_FOR_NEXT(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['succeeded', 'failed'])
@@ -199,7 +230,7 @@ class PREPARE_FOR_NEXT(smach.State):
         jobs = []
         jobs.append(threading.Thread(target=self.nav.move_back, args=(5.0,)))
         jobs[0].start()
-        jobs.append(threading.Thread(target=self.arm.move_group.go(),
+        jobs.append(threading.Thread(target=self.arm.move_group.go,
                     args=([0.0, 0.0, 0.0, 0.0, 0.0, 0.0],)))
         time.sleep(2)
         jobs[1].start()
@@ -207,3 +238,23 @@ class PREPARE_FOR_NEXT(smach.State):
         for j in jobs:
             j.join()
         return "succeeded"
+
+class CHECK_DOOR_ANGLE(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['succeeded', 'failed'])
+        self.name = "CHECK_DOOR_ANGLE"
+        self.success = False
+        self.angle_sub = rospy.Subscriber(
+            "/door_angle", std_msgs.msg.Float32, self.callback)
+
+    def callback(self, data):
+        self.success = False
+        if data > 60:
+            self.success = True
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state {}'.format(self.name))
+        if self.success:
+            return 'succeeded'
+        else:
+            return 'failed'

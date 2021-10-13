@@ -212,7 +212,7 @@ void LineExtractionROS::laserScanCallback(const sensor_msgs::LaserScan::ConstPtr
     data_cached_ = true;
   }
 
-  std::vector<double> scan_ranges_doubles(scan_msg->ranges.begin(), scan_msg->ranges.end());
+  std::vector<double> scan_ranges_doubles(scan_msg->ranges.begin(), scan_msg->ranges.begin()+180);
   line_extraction_.setRangeData(scan_ranges_doubles);
 }
 

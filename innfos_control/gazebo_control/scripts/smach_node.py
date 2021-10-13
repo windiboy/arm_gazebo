@@ -12,14 +12,17 @@ class Smach_Node():
     def __init__(self):
         # Create a SMACH state machine
         sm = smach.StateMachine(outcomes=['succeeded', 'failed'])
+        rospy.set_param("smach_count", 0)
 
         # Open the container
         with sm:
             # Add states to the container
             smach.StateMachine.add('NAVIGATE_TO_OUTLET', smach_states.NAVIGATE_TO_OUTLET(),
-                                   transitions={'succeeded': 'FETCH_DOOR_HAND', 'failed': 'failed'})
+                                   transitions={'succeeded': 'NAVIGATE_TO_FETCH', 'failed': 'failed'})
+            smach.StateMachine.add('NAVIGATE_TO_FETCH', smach_states.NAVIGATE_TO_FETCH(),
+                                   transitions={'succeeded': 'FETCH_DOOR_HAND', 'failed': 'NAVIGATE_TO_OUTLET', 'aborted':'failed'})
             smach.StateMachine.add('FETCH_DOOR_HAND', smach_states.FETCH_DOOR_HAND(),
-                                   transitions={'succeeded': 'GRIPPER_CLOSE', 'failed': 'failed'})
+                                   transitions={'succeeded': 'GRIPPER_CLOSE', 'failed': 'FETCH_DOOR_HAND', 'aborted':'failed'})
             smach.StateMachine.add('GRIPPER_CLOSE', smach_states.GRIPPER_CLOSE(),
                                    transitions={'succeeded': 'NAVIGATE_CIRCLE', 'failed': 'failed'})
             smach.StateMachine.add('NAVIGATE_CIRCLE', smach_states.NAVIGATE_CIRCLE(),
@@ -27,6 +30,8 @@ class Smach_Node():
             smach.StateMachine.add('GRIPPER_OPEN', smach_states.GRIPPER_OPEN(),
                                    transitions={'succeeded': 'PREPARE_FOR_NEXT'})
             smach.StateMachine.add('PREPARE_FOR_NEXT', smach_states.PREPARE_FOR_NEXT(),
+                                   transitions={'succeeded': 'CHECK_DOOR_ANGLE', 'failed': 'failed'})
+            smach.StateMachine.add('CHECK_DOOR_ANGLE', smach_states.CHECK_DOOR_ANGLE(),
                                    transitions={'succeeded': 'NAVIGATE_TO_DOOR', 'failed': 'failed'})
             smach.StateMachine.add('NAVIGATE_TO_DOOR', smach_states.NAVIGATE_TO_DOOR(),
                                    transitions={'succeeded': 'NAVIGATE_TO_OTHERROOM', 'failed': 'failed'})
