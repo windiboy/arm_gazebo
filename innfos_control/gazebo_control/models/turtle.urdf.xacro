@@ -21,12 +21,12 @@
       <material name="light_black"/>
     </visual> -->
 
-    <collision>
+    <!-- <collision>
       <origin xyz="-0.064 0 0.047" rpy="0 0 0"/>
       <geometry>
         <box size="0.266 0.266 0.094"/>
       </geometry>
-    </collision>
+    </collision> -->
 
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>

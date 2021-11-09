@@ -11,7 +11,7 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from geometry_msgs.msg import Twist
 from tf_conversions import transformations
 from math import pi, sin
-from std_msgs.msg import String
+from std_msgs.msg import String,Float32
 
 
 class PlatformControl:
@@ -26,6 +26,9 @@ class PlatformControl:
             "/bumper", ContactsState, self.pointCallback)
         self.catched = True
         self.start_time_cycle = rospy.Time.now()
+        self.angle_sub = rospy.Subscriber(
+            "/door_angle", Float32, self.AngleCallback, queue_size=10)
+        self.angle = 0
 
     def _done_cb(self, status, result):
         rospy.loginfo("navigation done! status:%d result:%s" %
@@ -42,6 +45,9 @@ class PlatformControl:
         if len(data.states) == 0:
             self.catched = False
 
+    def AngleCallback(self,data):
+        self.angle = data.data
+
     def move_back(self, delay=5.0):
         vel = Twist()
         vel.linear.x = -0.2
@@ -54,12 +60,14 @@ class PlatformControl:
     def pull_door_circle_v2(self):
         vel = Twist()
         used_time = rospy.Time.now()-self.start_time_cycle
-        while self.catched and (used_time < rospy.Duration(30)):
+        while self.catched and (used_time < rospy.Duration(25)):
             used_time = rospy.Time.now()-self.start_time_cycle
             rospy.loginfo("[pull_door_circle_v2] used_time {}, max time {}".format(used_time,rospy.Duration(30)))
             vel.linear.x = -0.05
             vel.angular.z = 0.01
             self.cmd_pub.publish(vel)
+            if self.angle >60:
+                break
         vel.linear.x = 0.0
         vel.angular.z = 0.0
         self.cmd_pub.publish(vel)

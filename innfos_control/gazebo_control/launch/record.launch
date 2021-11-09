@@ -1,0 +1,5 @@
+<launch>
+          <node pkg="innfos_control" type="record_arm.py" name="record_arm"/> 
+          <node pkg="innfos_control" type="record_odom.py" name="record_odom"/>
+          <node pkg="innfos_control" type="smach_node.py" name="smach_node"/> 
+</launch>
